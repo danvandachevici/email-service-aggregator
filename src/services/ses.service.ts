@@ -6,7 +6,9 @@ import { TaskType } from "src/types/task.type";
 @Injectable()
 export class SesService implements EmailServiceInterface {
   send(email: EmailType): Promise<TaskType> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      reject('Can\'t execute send on ses');
+    })
   }
 
 }

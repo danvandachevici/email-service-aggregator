@@ -20,11 +20,14 @@ export class EmailService {
 
   _recursiveTryServices(email: EmailType, services: EmailServiceInterface[]) {
     const currentService = services.shift();
-    console.log('trying service', currentService.constructor.name);
-    if (currentService) {
+    if (!!currentService) {
+      console.log('trying service', currentService.constructor.name);
       return this._trySend(email, currentService).catch(e => {
+        console.log('Caught exception, trying next service', e);
         return this._recursiveTryServices(email, services);
       });
+    } else {
+      return Promise.reject('All services are down. Panic.');
     }
   }
   _trySend(email: EmailType, service: EmailServiceInterface) {
@@ -36,7 +39,9 @@ export class EmailService {
     return this._recursiveTryServices(email, this._servicePreference).then((ret) => {
       return {status: 0, result: ret}
     }).catch((e) => {
-      console.log('Main catch');
+      console.log('Main catch', e);
+
+      return {status: 1, error: e};
     });
   }
 }
