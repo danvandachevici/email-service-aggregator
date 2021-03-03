@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './controllers/app.controller';
-import { AppService } from './services/app.service';
+import { ConfigModule } from '@nestjs/config';
+import { AppController } from './controllers/app/app.controller';
+import { EmailService } from './services/email.service';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development'],
+    }),
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [EmailService],
 })
 export class AppModule {}
