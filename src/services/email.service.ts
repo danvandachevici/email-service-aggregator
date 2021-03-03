@@ -33,8 +33,8 @@ export class EmailService {
 
   sendEmail(email: EmailType): Promise<TaskType> {
     const task = new TaskType();
-    return this._recursiveTryServices(email, this._servicePreference).then(() => {
-      return task;
+    return this._recursiveTryServices(email, this._servicePreference).then((ret) => {
+      return {status: 0, result: ret}
     }).catch((e) => {
       console.log('Main catch');
     });
