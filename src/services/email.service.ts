@@ -31,7 +31,7 @@ export class EmailService {
     return service.send(email);
   }
 
-  sendEmail(email: EmailType): Promise<any> {
+  sendEmail(email: EmailType): Promise<TaskType> {
     const task = new TaskType();
     return this._recursiveTryServices(email, this._servicePreference).then(() => {
       return task;
