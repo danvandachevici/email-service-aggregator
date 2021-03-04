@@ -1,17 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EmailServiceInterface } from 'src/interfaces/email-service.interface';
 import { EmailType } from 'src/types/email.type';
 import { TaskType } from 'src/types/task.type';
+import { MailgunService } from './mailgun.service';
 import { SendgridService } from './sendgrid.service';
 import { SesService } from './ses.service';
 
 @Injectable()
 export class EmailService {
   private _servicePreference: any[];
+  private _logger: Logger = new Logger(EmailService.name);
   constructor(
     private sesService: SesService,
     private sendgridService: SendgridService,
+    private mailgunService: MailgunService,
     private configService: ConfigService,
   ) {
     const order = this.configService.get('servicePreference').split(',');
@@ -23,7 +26,7 @@ export class EmailService {
     if (!!currentService) {
       console.log('trying service', currentService.constructor.name);
       return this._trySend(email, currentService).catch(e => {
-        console.log('Caught exception, trying next service', e);
+        console.log('Caught exception, trying next service ->', e);
         return this._recursiveTryServices(email, services);
       });
     } else {
