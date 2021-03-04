@@ -7,10 +7,15 @@ import * as sendgrid from '@sendgrid/mail';
 export class SendgridService implements EmailServiceInterface {
   private _logger: Logger = new Logger(SendgridService.name);
   constructor() {
-    sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+    if (!!process.env.SENDGRID_API_KEY) {
+      sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+    }
   }
 
   send(email: EmailType): Promise<any> {
+    if (!process.env.SENDGRID_API_KEY) {
+      return Promise.reject('Sendgrid disabled');
+    }
     const body = email.body + `<footer>Sent through sendgrid</footer>`;
     let params: any = {
       to: email.to,
