@@ -104,3 +104,5 @@ If no service could be used, an error is thrown:
     "error": "All services are down. Panic."
 }
 ```
+
+One other thing is needed for the emails to be sent - the from email address. This can be set at the `FROM_EMAIL` environment variable.
