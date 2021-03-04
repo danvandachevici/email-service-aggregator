@@ -1,7 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { EmailServiceInterface } from "src/interfaces/email-service.interface";
 import { EmailType } from "src/types/email.type";
-import { TaskType } from "src/types/task.type";
 import * as sendgrid from '@sendgrid/mail';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class SendgridService implements EmailServiceInterface {
     const body = email.body + `<footer>Sent through sendgrid</footer>`;
     let params: any = {
       to: email.to,
-      from: email.from,
+      from: 'dan.vandachevici@gmail.com',
       subject: email.subject,
     };
     if (email.contentType === 'html') {

@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { SendEmailDto } from 'src/dtos/send-email.dto';
-import { EmailService } from 'src/services/email.service';
-import { EmailType } from 'src/types/email.type';
-import { TaskType } from 'src/types/task.type';
+import { SendEmailDto } from '../../dtos/send-email.dto';
+import { EmailService } from '../../services/email.service';
+import { EmailType } from '../../types/email.type';
+import { ResponseType } from '../../types/response.type';
 
 @Controller('email-service')
 export class AppController {
@@ -12,7 +12,7 @@ export class AppController {
   ) {}
 
   @Post('send')
-  sendEmail(@Body() params: SendEmailDto): Promise<TaskType> {
+  sendEmail(@Body() params: SendEmailDto): Promise<ResponseType> {
     const email = new EmailType(plainToClass(SendEmailDto, params));
     return this.emailService.sendEmail(email);
   }

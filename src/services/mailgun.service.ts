@@ -1,7 +1,5 @@
-import { EmailServiceInterface } from "src/interfaces/email-service.interface";
+import { EmailServiceInterface } from "../interfaces/email-service.interface";
 import { EmailType } from "src/types/email.type";
-import { TaskType } from "src/types/task.type";
-import { EmailService } from "./email.service";
 import * as mailgun from 'mailgun-js';
 
 export class MailgunService implements EmailServiceInterface {
@@ -16,7 +14,7 @@ export class MailgunService implements EmailServiceInterface {
     return new Promise((resolve, reject) => {
       const data = {
         // from: "Mailgun Sandbox <postmaster@sandboxeacf76066ea04bafb45a4ff86d5df302.mailgun.org>",
-        from: email.from,
+        from: 'dan.vandachevici@gmail.com',
         to: email.to,
         subject: email.subject,
         html: email.body + `<footer>Sent through mailgun</footer>`

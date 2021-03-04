@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Http2ServerResponse } from 'http2';
 import { EmailServiceInterface } from 'src/interfaces/email-service.interface';
 import { EmailType } from 'src/types/email.type';
-import { TaskType } from 'src/types/task.type';
+import { ResponseType } from 'src/types/response.type';
 import { MailgunService } from './mailgun.service';
 import { SendgridService } from './sendgrid.service';
 import { SesService } from './ses.service';
@@ -25,7 +26,11 @@ export class EmailService {
     const currentService = services.shift();
     if (!!currentService) {
       console.log('trying service', currentService.constructor.name);
-      return this._trySend(email, currentService).catch(e => {
+      return this._trySend(email, currentService)
+      .then((res) => {
+        return currentService.constructor.name;
+      })
+      .catch(e => {
         console.log('Caught exception, trying next service ->', e);
         return this._recursiveTryServices(email, services);
       });
@@ -37,14 +42,13 @@ export class EmailService {
     return service.send(email);
   }
 
-  sendEmail(email: EmailType): Promise<TaskType> {
-    const task = new TaskType();
+  sendEmail(email: EmailType): Promise<ResponseType> {
     return this._recursiveTryServices(email, this._servicePreference).then((ret) => {
-      return {status: 0, result: ret}
+      console.log('ret:', ret);
+      return {status: 0, result: "Email queued", lastService: ret} as ResponseType;
     }).catch((e) => {
-      console.log('Main catch', e);
-
-      return {status: 1, error: e};
+      this._logger.error('Main catch:' + JSON.stringify(e));
+      return {status: 1, error: e} as ResponseType;
     });
   }
 }
