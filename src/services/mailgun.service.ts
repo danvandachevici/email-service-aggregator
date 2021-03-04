@@ -18,8 +18,7 @@ export class MailgunService implements EmailServiceInterface {
         return reject('Mailgun disabled');
       }
       const data = {
-        // from: "Mailgun Sandbox <postmaster@sandboxeacf76066ea04bafb45a4ff86d5df302.mailgun.org>",
-        from: 'dan.vandachevici@gmail.com',
+        from: process.env.FROM_EMAIL,
         to: email.to,
         subject: email.subject,
         html: email.body + `<footer>Sent through mailgun</footer>`

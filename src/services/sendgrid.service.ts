@@ -19,7 +19,7 @@ export class SendgridService implements EmailServiceInterface {
     const body = email.body + `<footer>Sent through sendgrid</footer>`;
     let params: any = {
       to: email.to,
-      from: 'dan.vandachevici@gmail.com',
+      from: process.env.FROM_EMAIL,
       subject: email.subject,
     };
     if (email.contentType === 'html') {

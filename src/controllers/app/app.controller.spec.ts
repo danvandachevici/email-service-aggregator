@@ -38,7 +38,7 @@ describe('AppController', () => {
     mailgunService = app.get<MailgunService>(MailgunService);
 
     mockParams = {
-      to: ['dan.vandachevici@gmail.com'],
+      to: [process.env.FROM_EMAIL],
       subject: 'test subject',
       body: 'test body',
     };
